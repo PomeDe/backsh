@@ -17,3 +17,37 @@ export async function GET() {
     })
     }
 }
+export async function POST(request) {
+  try {
+    const { name, email, password } = await request.json();
+
+    const query = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
+    const values = [name, email, password];
+
+    const [result] = await db.query(query, values); 
+
+    if (result.affectedRows === 0) {
+      return NextResponse.json({
+        success: false,
+        error: 'Failed to add user',
+      }, { status: 500 });
+    }
+
+    const newUser = {
+      id: result.insertId,
+      name,
+      email,
+      password, 
+    };
+
+    return NextResponse.json({ success: true, user: newUser });
+
+  } catch (error) {
+    console.error('Database insertion error:', error);
+
+    return NextResponse.json({
+      success: false,
+      error: 'Failed to add user',
+    }, { status: 500 });
+  }
+}
