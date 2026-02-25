@@ -23,11 +23,11 @@ export async function POST(req) {
   try {
     const body = await req.json();
 
-    const { name, email, password, age } = body;
+    const { firstName, lastName, email, password, age } = body;
 
     const [result] = await db.query(
-      "INSERT INTO users (name, email, age, password, created_at) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)",
-      [name, email, age, password]
+      "INSERT INTO users (first_name, last_name, email, age, password, created_at) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)",
+      [firstName, lastName, email, age, password]
     );
     console.log(result);
 
